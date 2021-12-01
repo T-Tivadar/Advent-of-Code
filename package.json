@@ -1,0 +1,15 @@
+{
+  "name": "advent-of-code",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch -o"
+  },
+  "author": "Török Tivadar",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^27.4.3",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.4.4"
+  }
+}
