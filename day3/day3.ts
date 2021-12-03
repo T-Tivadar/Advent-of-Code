@@ -24,21 +24,11 @@ export const d3part1 = (input: string[]) => {
 };
 
 export const d3part2 = (input: string[]) => {
-  const byte0: string[] = [];
-  const byte1: string[] = [];
-  let numberOf1 = 0;
-  for (let i = 0; i < input.length; i++) {
-    if (input[i][0] === "1") {
-      numberOf1++;
-      byte1.push(input[i]);
-    } else {
-      byte0.push(input[i]);
-    }
-  }
-  if (numberOf1 >= input.length / 2) {
-    return findOxygen(byte1, 1) * findCO2(byte0, 1);
+  const split = splitBytes(input, 0);
+  if (split.numberOf1 >= input.length / 2) {
+    return findOxygen(split.byte1, 1) * findCO2(split.byte0, 1);
   } else {
-    return findOxygen(byte0, 1) * findCO2(byte1, 1);
+    return findOxygen(split.byte0, 1) * findCO2(split.byte1, 1);
   }
 };
 
@@ -46,21 +36,11 @@ const findOxygen = (oxygen: string[], position: number): any => {
   if (oxygen.length === 1) {
     return parseInt(oxygen[0], 2);
   }
-  const byte0: string[] = [];
-  const byte1: string[] = [];
-  let numberOf1 = 0;
-  for (let i = 0; i < oxygen.length; i++) {
-    if (oxygen[i][position] === "1") {
-      numberOf1++;
-      byte1.push(oxygen[i]);
-    } else {
-      byte0.push(oxygen[i]);
-    }
-  }
-  if (numberOf1 >= oxygen.length / 2) {
-    return findOxygen(byte1, ++position);
+  const split = splitBytes(oxygen, position);
+  if (split.numberOf1 >= oxygen.length / 2) {
+    return findOxygen(split.byte1, ++position);
   } else {
-    return findOxygen(byte0, ++position);
+    return findOxygen(split.byte0, ++position);
   }
 };
 
@@ -68,21 +48,27 @@ const findCO2 = (co2: string[], position: number): any => {
   if (co2.length === 1) {
     return parseInt(co2[0], 2);
   }
+  const split = splitBytes(co2, position);
+  if (split.numberOf1 >= co2.length / 2) {
+    return findCO2(split.byte0, ++position);
+  } else {
+    return findCO2(split.byte1, ++position);
+  }
+};
+
+const splitBytes = (bytes: string[], position: number) => {
   const byte0: string[] = [];
   const byte1: string[] = [];
   let numberOf1 = 0;
-  for (let i = 0; i < co2.length; i++) {
-    if (co2[i][position] === "1") {
+  for (let i = 0; i < bytes.length; i++) {
+    if (bytes[i][position] === "1") {
       numberOf1++;
-      byte1.push(co2[i]);
+      byte1.push(bytes[i]);
     } else {
-      byte0.push(co2[i]);
+      byte0.push(bytes[i]);
     }
   }
-  if (numberOf1 >= co2.length / 2) {
-    return findCO2(byte0, ++position);
-  } else {
-    return findCO2(byte1, ++position);
-  }
+  return { numberOf1, byte0, byte1 };
 };
+
 console.log(d3part2(d3Input));
